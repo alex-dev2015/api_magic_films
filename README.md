@@ -29,7 +29,7 @@ Fazer o clone do projeto e entrar na pasta api_magic_films
 
 
 ```
-   git clone git@github.com:alex-dev2015/api_magic_films.git
+   git clone https://github.com/alex-dev2015/api_magic_films.git
    cd api_magic_films
 ```
 
