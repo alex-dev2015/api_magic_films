@@ -42,7 +42,7 @@ Executar o composer para a instalação das dependências do projeto
 Entrar no gerenciador de banco de dados mysql e criar uma base de dados
 ```
    > mysql -u db_user -p
-   > CREATE DATABASE magicflix;
+   > CREATE DATABASE `magicflix` /*!40100 COLLATE 'utf8mb4_unicode_ci' */
 ```
 
 Renomear o arquivo .env.example para .env e alterar as variáveis de ambiente 
