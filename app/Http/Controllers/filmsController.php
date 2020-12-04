@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Classification;
 use App\Director;
 use App\Film;
+use Illuminate\Database\Events\TransactionBeginning;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class filmsController extends Controller
 {
@@ -65,26 +67,27 @@ class filmsController extends Controller
         $dataFilm  = $request->only(['name', 'classification_id', 'director_id']);
         $dataActor = $data['actors'];
 
-        $pizza = explode(",", $dataActor);
-
-
+        $arrayActors = explode(",", $dataActor);
 
         try{
-
+            DB::beginTransaction();
             //Insere dentro do banco de dados na Tabela films
             $lastId = Film::create($dataFilm)->id;
 
             $film = Film::find($lastId);
 
+            //Insere a lista dos atores  com o respectivo filme na tabela pivot
+            $pivot = $film->listActors()->sync($arrayActors);
 
-//            $film->listActors()->attach($dataActor);
-            $film->listActors()->sync($pizza);
-
+            if ($pivot){
+                DB::commit();
+            }
             return response()->json([
                 "message" => "Filme inserido com sucesso!"
             ], 201);
         }catch (\Exception $e){
             //Cajo haja alguma exceção é retoranado a mensagem do erro
+            DB::rollBack();
             return response()->json($e, 500);
         }
 
